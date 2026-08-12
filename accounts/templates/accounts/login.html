@@ -38,7 +38,15 @@
             margin-bottom: 10px;
             color: #333;
         }
-
+         .error-message {
+    background: #ffe5e5;
+    color: #d8000c;
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    text-align: center;
+    font-size: 14px;
+}
         .subtitle {
             text-align: center;
             color: #777;
@@ -69,6 +77,32 @@
             border-color: #667eea;
         }
 
+        /* Password container */
+        .password-container {
+            position: relative;
+        }
+
+        .password-container input {
+            padding-right: 50px;
+        }
+
+        /* Show / Hide password button */
+        #togglePassword {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 5px;
+        }
+
+        #togglePassword:hover {
+            opacity: 0.7;
+        }
+
         .login-btn {
             width: 100%;
             padding: 13px;
@@ -79,10 +113,12 @@
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
+            transition: 0.3s;
         }
 
         .login-btn:hover {
             background: #5568d8;
+            transform: translateY(-1px);
         }
 
         .footer-text {
@@ -92,9 +128,23 @@
             font-size: 14px;
         }
 
+        /* Mobile responsive */
         @media (max-width: 480px) {
+
+            body {
+                padding: 15px;
+            }
+
             .login-container {
                 padding: 25px 20px;
+            }
+
+            .login-container h1 {
+                font-size: 25px;
+            }
+
+            .subtitle {
+                font-size: 14px;
             }
         }
     </style>
@@ -113,31 +163,62 @@
         <form method="POST">
 
             {% csrf_token %}
+        
+{% if error %}
+    <div class="error-message">
+        {{ error }}
+    </div>
+{% endif %}
 
+            <!-- Username -->
             <div class="form-group">
-                <label for="username">Username</label>
+
+                <label for="username">
+                    Username
+                </label>
 
                 <input
                     type="text"
                     id="username"
                     name="username"
                     placeholder="Enter your username"
+                    autocomplete="username"
                     required
                 >
+
             </div>
 
+            <!-- Password -->
             <div class="form-group">
-                <label for="password">Password</label>
 
-                <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    placeholder="Enter your password"
-                    required
-                >
+                <label for="password">
+                    Password
+                </label>
+
+                <div class="password-container">
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Enter your password"
+                        autocomplete="current-password"
+                        required
+                    >
+
+                    <button
+                        type="button"
+                        id="togglePassword"
+                        aria-label="Show password"
+                    >
+                        👁️
+                    </button>
+
+                </div>
+
             </div>
 
+            <!-- Login Button -->
             <button type="submit" class="login-btn">
                 Login
             </button>
@@ -149,6 +230,44 @@
         </p>
 
     </div>
+
+    <!-- Show / Hide Password -->
+    <script>
+
+        const password =
+            document.getElementById("password");
+
+        const togglePassword =
+            document.getElementById("togglePassword");
+
+        togglePassword.addEventListener("click", function () {
+
+            if (password.type === "password") {
+
+                password.type = "text";
+
+                togglePassword.textContent = "🙈";
+
+                togglePassword.setAttribute(
+                    "aria-label",
+                    "Hide password"
+                );
+
+            } else {
+
+                password.type = "password";
+
+                togglePassword.textContent = "👁️";
+
+                togglePassword.setAttribute(
+                    "aria-label",
+                    "Show password"
+                );
+            }
+
+        });
+
+    </script>
 
 </body>
 </html>
