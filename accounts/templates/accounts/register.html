@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Create Account</title>
+
+    <style>
+
+        /* ==============================
+           RESET
+        ============================== */
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+
+        /* ==============================
+           BODY
+        ============================== */
+
+        body {
+            min-height: 100vh;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            background: linear-gradient(
+                135deg,
+                #667eea,
+                #764ba2
+            );
+
+            padding: 20px;
+        }
+
+
+        /* ==============================
+           REGISTER CONTAINER
+        ============================== */
+
+        .register-container {
+
+            width: 400px;
+            max-width: 100%;
+
+            background: white;
+
+            padding: 35px;
+
+            border-radius: 15px;
+
+            box-shadow:
+                0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+
+        /* ==============================
+           TITLE
+        ============================== */
+
+        h2 {
+
+            text-align: center;
+
+            margin-bottom: 25px;
+
+            color: #333;
+
+            font-size: 28px;
+        }
+
+
+        /* ==============================
+           MESSAGES
+        ============================== */
+
+        .messages {
+
+            margin-bottom: 15px;
+        }
+
+
+        .message {
+
+            padding: 10px;
+
+            border-radius: 7px;
+
+            margin-bottom: 8px;
+
+            text-align: center;
+
+            font-size: 14px;
+        }
+
+
+        /* Error message */
+
+        .message.error {
+
+            background: #ffe5e5;
+
+            color: #d00000;
+        }
+
+
+        /* Success message */
+
+        .message.success {
+
+            background: #e5ffe9;
+
+            color: #087f23;
+        }
+
+
+        /* ==============================
+           INPUT GROUP
+        ============================== */
+
+        .input-group {
+
+            margin-bottom: 18px;
+        }
+
+
+        /* ==============================
+           LABEL
+        ============================== */
+
+        label {
+
+            display: block;
+
+            margin-bottom: 7px;
+
+            color: #444;
+
+            font-weight: bold;
+
+            font-size: 14px;
+        }
+
+
+        /* ==============================
+           NORMAL INPUT
+        ============================== */
+
+        input {
+
+            width: 100%;
+
+            padding: 12px;
+
+            border: 1px solid #ccc;
+
+            border-radius: 8px;
+
+            font-size: 15px;
+
+            outline: none;
+
+            transition: 0.2s;
+        }
+
+
+        input:focus {
+
+            border-color: #667eea;
+
+            box-shadow:
+                0 0 0 3px rgba(102, 126, 234, 0.12);
+        }
+
+
+        /* ==============================
+           PASSWORD BOX
+        ============================== */
+
+        .password-box {
+
+            position: relative;
+
+            width: 100%;
+        }
+
+
+        .password-box input {
+
+            padding-right: 65px;
+        }
+
+
+        /* ==============================
+           SHOW / HIDE BUTTON
+        ============================== */
+
+        .show-password {
+
+            position: absolute;
+
+            right: 8px;
+
+            top: 50%;
+
+            transform: translateY(-50%);
+
+            width: auto;
+
+            padding: 5px 8px;
+
+            border: none;
+
+            background: transparent;
+
+            color: #667eea;
+
+            font-size: 13px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+
+        .show-password:hover {
+
+            background: transparent;
+
+            color: #5568d9;
+        }
+
+
+        /* ==============================
+           CREATE ACCOUNT BUTTON
+        ============================== */
+
+        .register-button {
+
+            width: 100%;
+
+            padding: 13px;
+
+            border: none;
+
+            border-radius: 8px;
+
+            background: #667eea;
+
+            color: white;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+
+        .register-button:hover {
+
+            background: #5568d9;
+
+            transform: translateY(-1px);
+        }
+
+
+        .register-button:active {
+
+            transform: translateY(0);
+        }
+
+
+        /* ==============================
+           LOGIN LINK
+        ============================== */
+
+        .login-link {
+
+            text-align: center;
+
+            margin-top: 20px;
+
+            color: #555;
+
+            font-size: 14px;
+        }
+
+
+        .login-link a {
+
+            color: #667eea;
+
+            text-decoration: none;
+
+            font-weight: bold;
+        }
+
+
+        .login-link a:hover {
+
+            text-decoration: underline;
+        }
+
+
+        /* ==============================
+           MOBILE RESPONSIVE
+        ============================== */
+
+        @media (max-width: 480px) {
+
+            .register-container {
+
+                padding: 25px;
+
+                border-radius: 12px;
+            }
+
+            h2 {
+
+                font-size: 24px;
+
+                margin-bottom: 20px;
+            }
+
+            input {
+
+                padding: 11px;
+
+                font-size: 14px;
+            }
+
+            .register-button {
+
+                padding: 12px;
+
+                font-size: 15px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- ==============================
+         REGISTER CONTAINER
+    ============================== -->
+
+    <div class="register-container">
+
+
+        <!-- TITLE -->
+
+        <h2>Create Account</h2>
+
+
+        <!-- ==============================
+             DJANGO MESSAGES
+        ============================== -->
+
+        {% if messages %}
+
+            <div class="messages">
+
+                {% for message in messages %}
+
+                    <div class="message {{ message.tags }}">
+
+                        {{ message }}
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% endif %}
+
+
+        <!-- ==============================
+             REGISTER FORM
+        ============================== -->
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+
+            <!-- USERNAME -->
+
+            <div class="input-group">
+
+                <label for="username">
+                    Username
+                </label>
+
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    placeholder="Enter username"
+                    autocomplete="username"
+                    minlength="4"
+                    required
+                >
+
+            </div>
+
+
+            <!-- EMAIL -->
+
+            <div class="input-group">
+
+                <label for="email">
+                    Email
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Enter email"
+                    autocomplete="email"
+                    required
+                >
+
+            </div>
+
+
+            <!-- PASSWORD -->
+
+            <div class="input-group">
+
+                <label for="password">
+                    Password
+                </label>
+
+                <div class="password-box">
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Enter password"
+                        autocomplete="new-password"
+                        required
+                    >
+
+                    <button
+                        type="button"
+                        class="show-password"
+                        onclick="togglePassword('password', this)"
+                    >
+                        Show
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- CONFIRM PASSWORD -->
+
+            <div class="input-group">
+
+                <label for="confirm_password">
+                    Confirm Password
+                </label>
+
+                <div class="password-box">
+
+                    <input
+                        type="password"
+                        id="confirm_password"
+                        name="confirm_password"
+                        placeholder="Confirm password"
+                        autocomplete="new-password"
+                        required
+                    >
+
+                    <button
+                        type="button"
+                        class="show-password"
+                        onclick="togglePassword('confirm_password', this)"
+                    >
+                        Show
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- CREATE ACCOUNT BUTTON -->
+
+            <button
+                type="submit"
+                class="register-button"
+            >
+                Create Account
+            </button>
+
+
+        </form>
+
+
+        <!-- ==============================
+             LOGIN LINK
+        ============================== -->
+
+        <div class="login-link">
+
+            Already have an account?
+
+            <a href="{% url 'login' %}">
+                Login
+            </a>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- ==============================
+         SHOW / HIDE PASSWORD JAVASCRIPT
+    ============================== -->
+
+    <script>
+
+        function togglePassword(inputId, button) {
+
+            const input =
+                document.getElementById(inputId);
+
+
+            if (input.type === "password") {
+
+                input.type = "text";
+
+                button.textContent = "Hide";
+
+            }
+
+            else {
+
+                input.type = "password";
+
+                button.textContent = "Show";
+
+            }
+
+        }
+
+    </script>
+
+
+</body>
+
+</html>

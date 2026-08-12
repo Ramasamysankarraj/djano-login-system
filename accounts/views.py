@@ -1,7 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
+
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.contrib.auth.password_validation import validate_password
 from django.contrib import messages
+
+from django.core.exceptions import ValidationError
 
 from .models import Student
 
@@ -24,6 +29,7 @@ def login_view(request):
 
         # Check empty fields
         if not username or not password:
+
             return render(
                 request,
                 "accounts/login.html",
@@ -63,6 +69,151 @@ def login_view(request):
     return render(
         request,
         "accounts/login.html"
+    )
+
+
+# =========================================================
+# REGISTER
+# =========================================================
+
+def register_view(request):
+
+    # If already logged in,
+    # don't allow user to register again.
+    if request.user.is_authenticated:
+        return redirect("dashboard")
+
+    if request.method == "POST":
+
+        username = request.POST.get("username", "").strip()
+        email = request.POST.get("email", "").strip()
+        password = request.POST.get("password", "")
+        confirm_password = request.POST.get("confirm_password", "")
+
+        # -----------------------------------------
+        # Check empty fields
+        # -----------------------------------------
+
+        if not username or not email or not password or not confirm_password:
+
+            messages.error(
+                request,
+                "All fields are required."
+            )
+
+            return render(
+                request,
+                "accounts/register.html"
+            )
+
+        # -----------------------------------------
+        # Check username length
+        # -----------------------------------------
+
+        if len(username) < 4:
+
+            messages.error(
+                request,
+                "Username must contain at least 4 characters."
+            )
+
+            return render(
+                request,
+                "accounts/register.html"
+            )
+
+        # -----------------------------------------
+        # Check username already exists
+        # -----------------------------------------
+
+        if User.objects.filter(username__iexact=username).exists():
+
+            messages.error(
+                request,
+                "Username already exists. Please choose another."
+            )
+
+            return render(
+                request,
+                "accounts/register.html"
+            )
+
+        # -----------------------------------------
+        # Check email already exists
+        # -----------------------------------------
+
+        if User.objects.filter(email__iexact=email).exists():
+
+            messages.error(
+                request,
+                "An account with this email already exists."
+            )
+
+            return render(
+                request,
+                "accounts/register.html"
+            )
+
+        # -----------------------------------------
+        # Check password confirmation
+        # -----------------------------------------
+
+        if password != confirm_password:
+
+            messages.error(
+                request,
+                "Passwords do not match."
+            )
+
+            return render(
+                request,
+                "accounts/register.html"
+            )
+
+        # -----------------------------------------
+        # Validate password
+        # -----------------------------------------
+
+        try:
+
+            validate_password(
+                password
+            )
+
+        except ValidationError as e:
+
+            for error in e.messages:
+
+                messages.error(
+                    request,
+                    error
+                )
+
+            return render(
+                request,
+                "accounts/register.html"
+            )
+
+        # -----------------------------------------
+        # Create user
+        # -----------------------------------------
+
+        user = User.objects.create_user(
+            username=username,
+            email=email,
+            password=password
+        )
+
+        messages.success(
+            request,
+            "Account created successfully. Please login."
+        )
+
+        return redirect("login")
+
+    return render(
+        request,
+        "accounts/register.html"
     )
 
 
@@ -116,9 +267,9 @@ def add_student(request):
         age = request.POST.get("age", "").strip()
         course = request.POST.get("course", "").strip()
 
-        # -------------------------
+        # -----------------------------------------
         # Validation
-        # -------------------------
+        # -----------------------------------------
 
         if not name or not email or not age or not course:
 
@@ -132,8 +283,12 @@ def add_student(request):
                 "accounts/add_student.html"
             )
 
+        # -----------------------------------------
         # Validate age
+        # -----------------------------------------
+
         try:
+
             age = int(age)
 
             if age <= 0:
@@ -151,9 +306,9 @@ def add_student(request):
                 "accounts/add_student.html"
             )
 
-        # -------------------------
+        # -----------------------------------------
         # Create student
-        # -------------------------
+        # -----------------------------------------
 
         Student.objects.create(
             name=name,
@@ -213,9 +368,9 @@ def edit_student(request, id):
         age = request.POST.get("age", "").strip()
         course = request.POST.get("course", "").strip()
 
-        # -------------------------
+        # -----------------------------------------
         # Validation
-        # -------------------------
+        # -----------------------------------------
 
         if not name or not email or not age or not course:
 
@@ -232,8 +387,12 @@ def edit_student(request, id):
                 }
             )
 
+        # -----------------------------------------
         # Validate age
+        # -----------------------------------------
+
         try:
+
             age = int(age)
 
             if age <= 0:
@@ -254,9 +413,9 @@ def edit_student(request, id):
                 }
             )
 
-        # -------------------------
+        # -----------------------------------------
         # Update student
-        # -------------------------
+        # -----------------------------------------
 
         student.name = name
         student.email = email
