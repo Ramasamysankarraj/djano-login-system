@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Edit Student | Student Management</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f7fb;
+            color: #333;
+        }
+
+        .navbar {
+            height: 70px;
+            background: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 40px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .back-btn {
+            text-decoration: none;
+            color: #555;
+            font-weight: bold;
+        }
+
+        .back-btn:hover {
+            color: #667eea;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 45px auto;
+            padding: 0 25px;
+        }
+
+        .form-card {
+            background: white;
+            padding: 35px;
+            border-radius: 15px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.07);
+        }
+
+        .form-header {
+            margin-bottom: 30px;
+        }
+
+        .form-header h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .form-header p {
+            color: #777;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #444;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        .update-btn {
+            flex: 1;
+            border: none;
+            background: #667eea;
+            color: white;
+            padding: 13px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .update-btn:hover {
+            background: #5568d9;
+        }
+
+        .cancel-btn {
+            flex: 1;
+            text-align: center;
+            text-decoration: none;
+            background: #f1f3f5;
+            color: #555;
+            padding: 13px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .cancel-btn:hover {
+            background: #e5e7eb;
+        }
+
+        @media (max-width: 600px) {
+
+            .navbar {
+                padding: 0 20px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .form-card {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+
+        <div class="logo">
+            Student Management
+        </div>
+
+        <a href="{% url 'student_list' %}" class="back-btn">
+            ← Students
+        </a>
+
+    </nav>
+
+
+    <main class="container">
+
+        <div class="form-card">
+
+            <div class="form-header">
+
+                <h1>Edit Student</h1>
+
+                <p>
+                    Update the student's information below.
+                </p>
+
+            </div>
+
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+
+                <div class="form-group">
+
+                    <label for="name">
+                        Full Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        value="{{ student.name }}"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="email">
+                        Email Address
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        value="{{ student.email }}"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label for="age">
+                            Age
+                        </label>
+
+                        <input
+                            type="number"
+                            id="age"
+                            name="age"
+                            value="{{ student.age }}"
+                            min="1"
+                            max="100"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="course">
+                            Course
+                        </label>
+
+                        <input
+                            type="text"
+                            id="course"
+                            name="course"
+                            value="{{ student.course }}"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="buttons">
+
+                    <a
+                        href="{% url 'student_list' %}"
+                        class="cancel-btn"
+                    >
+                        Cancel
+                    </a>
+
+                    <button
+                        type="submit"
+                        class="update-btn"
+                    >
+                        Update Student
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </main>
+
+</body>
+
+</html>

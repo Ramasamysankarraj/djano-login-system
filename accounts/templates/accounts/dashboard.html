@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard | Student Management</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f7fb;
+            color: #333;
+        }
+
+        /* ================= NAVBAR ================= */
+
+        .navbar {
+            height: 70px;
+            background: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .username {
+            font-weight: bold;
+            color: #444;
+        }
+
+        .logout-btn {
+            text-decoration: none;
+            background: #ef4444;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 7px;
+            font-size: 14px;
+        }
+
+        .logout-btn:hover {
+            background: #dc2626;
+        }
+
+
+        /* ================= MAIN ================= */
+
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 25px;
+        }
+
+        .welcome {
+            margin-bottom: 30px;
+        }
+
+        .welcome h1 {
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        .welcome p {
+            color: #777;
+        }
+
+
+        /* ================= CARDS ================= */
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-bottom: 35px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+
+            transition: all 0.2s ease;
+        }
+
+        .card-icon {
+            font-size: 30px;
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            color: #777;
+            font-size: 15px;
+            margin-bottom: 8px;
+        }
+
+        .card-number {
+            font-size: 30px;
+            font-weight: bold;
+            color: #333;
+        }
+
+
+        /* ================= CLICKABLE CARDS ================= */
+
+        .clickable-card {
+            text-decoration: none;
+            color: inherit;
+            cursor: pointer;
+        }
+
+        .clickable-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+        }
+
+        .clickable-card:hover .card-number {
+            color: #667eea;
+        }
+
+        .card-description {
+            display: block;
+            margin-top: 15px;
+            color: #667eea;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+
+        /* ================= QUICK ACTIONS ================= */
+
+        .actions {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+        }
+
+        .actions h2 {
+            margin-bottom: 20px;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            text-decoration: none;
+            padding: 13px 22px;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+        }
+
+        .add-btn {
+            background: #667eea;
+        }
+
+        .students-btn {
+            background: #10b981;
+        }
+
+        .add-btn:hover {
+            background: #5568d9;
+        }
+
+        .students-btn:hover {
+            background: #059669;
+        }
+
+
+        /* ================= MOBILE ================= */
+
+        @media (max-width: 768px) {
+
+            .navbar {
+                padding: 0 20px;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .username {
+                display: none;
+            }
+
+            .container {
+                margin-top: 25px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- ================= NAVBAR ================= -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            Student Management
+        </div>
+
+
+        <div class="user-section">
+
+            <span class="username">
+                Welcome, {{ user.username }}
+            </span>
+
+
+            <a
+                href="{% url 'logout' %}"
+                class="logout-btn"
+            >
+                Logout
+            </a>
+
+        </div>
+
+    </nav>
+
+
+
+    <!-- ================= MAIN CONTENT ================= -->
+
+    <main class="container">
+
+
+        <!-- Welcome -->
+
+        <div class="welcome">
+
+            <h1>
+                Dashboard
+            </h1>
+
+            <p>
+                Manage your students from one place.
+            </p>
+
+        </div>
+
+
+
+        <!-- ================= DASHBOARD CARDS ================= -->
+
+        <div class="cards">
+
+
+            <!-- TOTAL STUDENTS -->
+
+            <div class="card">
+
+                <div class="card-icon">
+                    👨‍🎓
+                </div>
+
+                <h3>
+                    Total Students
+                </h3>
+
+                <div class="card-number">
+                    {{ student_count }}
+                </div>
+
+            </div>
+
+
+
+            <!-- ADD STUDENT -->
+
+            <a
+                href="{% url 'add_student' %}"
+                class="card clickable-card"
+            >
+
+                <div class="card-icon">
+                    ➕
+                </div>
+
+                <h3>
+                    Add Student
+                </h3>
+
+                <div class="card-number">
+                    +
+                </div>
+
+                <span class="card-description">
+                    Add a new student →
+                </span>
+
+            </a>
+
+
+
+            <!-- MANAGE STUDENTS -->
+
+            <a
+                href="{% url 'student_list' %}"
+                class="card clickable-card"
+            >
+
+                <div class="card-icon">
+                    📋
+                </div>
+
+                <h3>
+                    Manage Students
+                </h3>
+
+                <div class="card-number">
+                    →
+                </div>
+
+                <span class="card-description">
+                    View all students →
+                </span>
+
+            </a>
+
+
+        </div>
+
+
+
+        <!-- ================= QUICK ACTIONS ================= -->
+
+        <div class="actions">
+
+            <h2>
+                Quick Actions
+            </h2>
+
+
+            <div class="buttons">
+
+
+                <a
+                    href="{% url 'add_student' %}"
+                    class="action-btn add-btn"
+                >
+                    + Add Student
+                </a>
+
+
+                <a
+                    href="{% url 'student_list' %}"
+                    class="action-btn students-btn"
+                >
+                    View Students
+                </a>
+
+
+            </div>
+
+        </div>
+
+
+    </main>
+
+
+</body>
+
+</html>
