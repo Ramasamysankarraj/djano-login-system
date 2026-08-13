@@ -471,3 +471,204 @@ def delete_student(request, id):
     )
 
     return redirect("student_list")
+# =========================================================
+# REST API - STUDENT LIST / CREATE
+# =========================================================
+
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+
+from .serializers import StudentSerializer
+
+
+@api_view(["GET", "POST"])
+def student_api(request):
+
+    # -----------------------------------------
+    # GET - Get all students
+    # -----------------------------------------
+
+    if request.method == "GET":
+
+        students = Student.objects.all().order_by("-id")
+
+        serializer = StudentSerializer(
+            students,
+            many=True
+        )
+
+        return Response(
+            serializer.data,
+            status=status.HTTP_200_OK
+        )
+
+    # -----------------------------------------
+    # POST - Create student
+    # -----------------------------------------
+
+    if request.method == "POST":
+
+        serializer = StudentSerializer(
+            data=request.data
+        )
+
+        if serializer.is_valid():
+
+            serializer.save()
+
+            return Response(
+                serializer.data,
+                status=status.HTTP_201_CREATED
+            )
+
+        return Response(
+            serializer.errors,
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    # =========================================================
+# REST API - STUDENT LIST / CREATE
+# =========================================================
+
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+
+from .serializers import StudentSerializer
+
+
+@api_view(["GET", "POST"])
+def student_api(request):
+
+    # =====================================================
+    # GET - Get all students
+    # =====================================================
+
+    if request.method == "GET":
+
+        students = Student.objects.all().order_by("-id")
+
+        serializer = StudentSerializer(
+            students,
+            many=True
+        )
+
+        return Response(
+            serializer.data,
+            status=status.HTTP_200_OK
+        )
+
+    # =====================================================
+    # POST - Create student
+    # =====================================================
+
+    if request.method == "POST":
+
+        serializer = StudentSerializer(
+            data=request.data
+        )
+
+        if serializer.is_valid():
+
+            serializer.save()
+
+            return Response(
+                serializer.data,
+                status=status.HTTP_201_CREATED
+            )
+
+        return Response(
+            serializer.errors,
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    # =========================================================
+# REST API - SINGLE STUDENT
+# =========================================================
+
+@api_view(["GET", "PUT", "PATCH", "DELETE"])
+def student_detail_api(request, id):
+
+    # Find student
+    student = get_object_or_404(
+        Student,
+        id=id
+    )
+
+    # =====================================================
+    # GET - Get one student
+    # =====================================================
+
+    if request.method == "GET":
+
+        serializer = StudentSerializer(student)
+
+        return Response(
+            serializer.data,
+            status=status.HTTP_200_OK
+        )
+
+    # =====================================================
+    # PUT - Update complete student
+    # =====================================================
+
+    if request.method == "PUT":
+
+        serializer = StudentSerializer(
+            student,
+            data=request.data
+        )
+
+        if serializer.is_valid():
+
+            serializer.save()
+
+            return Response(
+                serializer.data,
+                status=status.HTTP_200_OK
+            )
+
+        return Response(
+            serializer.errors,
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    # =====================================================
+    # PATCH - Update partial student data
+    # =====================================================
+
+    if request.method == "PATCH":
+
+        serializer = StudentSerializer(
+            student,
+            data=request.data,
+            partial=True
+        )
+
+        if serializer.is_valid():
+
+            serializer.save()
+
+            return Response(
+                serializer.data,
+                status=status.HTTP_200_OK
+            )
+
+        return Response(
+            serializer.errors,
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    # =====================================================
+    # DELETE - Delete student
+    # =====================================================
+
+    if request.method == "DELETE":
+
+        student.delete()
+
+        return Response(
+            {
+                "message": "Student deleted successfully."
+            },
+            status=status.HTTP_204_NO_CONTENT
+        )
